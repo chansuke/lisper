@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
     add_history(input);
 
     mpc_result_t r;
-    if (mac_parse("<stdin>", input, Lisper, &r)) {
+    if (mpc_parse("<stdin>", input, Lisper, &r)) {
       /* On success print delete the AST */
       mpc_ast_print(r.output);
       mpc_ast_delete(r.output);
