@@ -23,19 +23,21 @@ void add_history(char* unused) {}
 int main(int argc, char** argv) {
 
 /*Parser*/
-  mpc_parser_t* Number   = mpc_new("Number");
-  mpc_parser_t* Operator = mpc_new("operator");
+  mpc_parser_t* Number   = mpc_new("number");
+  mpc_parser_t* Operator = mpc_new("string");
+  mpc_parser_t* String   = mpc_new("operator")
   mpc_parser_t* Expr     = mpc_new("expr");
   mpc_parser_t* Lisper    = mpc_new("lisper");
 
   mpca_lang(MPCA_LANG_DEFAULT,
     "                                                    \
 　　  number   : /-?[0-9]+/ ;                            \
+      string   : [a-zA-Z] ;                              \
       operator : '+' | '-' | '*' | '/' ;                 \
       expr     : <number> | '(' <operator> <expr>+ ')' ; \
       lisper   : /^/ <operator> <expr>+ /$/ ;            \
     ",
-    Number, Operator, Expr, Lisper);
+    Number, String, Operator, Expr, Lisper);
 
 	puts("Lisper Version 0.2");
 	puts("Press Ctrl+c to Exit\n");
