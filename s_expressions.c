@@ -284,7 +284,7 @@ int main(int argc, char** argv) {
     ",
     Number, Symbol, Sexpr, Expr, Lisper);
 
-  puts("Lisper Version 0.0.0.0.5");
+  puts("Lisper Version 0.5");
   puts("Press Ctrl+c to Exit\n");
 
   while (1) {
