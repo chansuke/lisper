@@ -282,7 +282,7 @@ int main(int argc, char** argv) {
       expr   : <number> | <symbol> | <sexpr> ; \
       lisper  : /^/ <expr>* /$/ ;               \
     ",
-    Number, Symbol, Sexpr, Expr, lisper);
+    Number, Symbol, Sexpr, Expr, Lisper);
 
   puts("Lisper Version 0.0.0.0.5");
   puts("Press Ctrl+c to Exit\n");
@@ -293,7 +293,7 @@ int main(int argc, char** argv) {
     add_history(input);
 
     mpc_result_t r;
-    if (mpc_parse("<stdin>", input, lisper, &r)) {
+    if (mpc_parse("<stdin>", input, Lisper, &r)) {
       lval* x = lval_eval(lval_read(r.output));
       lval_println(x);
       lval_del(x);
@@ -307,7 +307,7 @@ int main(int argc, char** argv) {
 
   }
 
-  mpc_cleanup(5, Number, Symbol, Sexpr, Expr, lisper);
+  mpc_cleanup(5, Number, Symbol, Sexpr, Expr, Lisper);
 
   return 0;
 }
