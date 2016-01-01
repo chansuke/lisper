@@ -271,6 +271,7 @@ int main(int argc, char** argv) {
   mpc_parser_t* Number = mpc_new("number");
   mpc_parser_t* Symbol = mpc_new("symbol");
   mpc_parser_t* Sexpr  = mpc_new("sexpr");
+  mpc_parser_t* Qexpr  = mpc_new("qexpr");
   mpc_parser_t* Expr   = mpc_new("expr");
   mpc_parser_t* Lisper = mpc_new("lisper");
 
@@ -279,10 +280,11 @@ int main(int argc, char** argv) {
       number : /-?[0-9]+/ ;                    \
       symbol : '+' | '-' | '*' | '/' ;         \
       sexpr  : '(' <expr>* ')' ;               \
+      qexpr  : '{' <expr>* '}' ;               \
       expr   : <number> | <symbol> | <sexpr> ; \
-      lisper  : /^/ <expr>* /$/ ;               \
+      lisper  : /^/ <expr>* /$/ ;              \
     ",
-    Number, Symbol, Sexpr, Expr, Lisper);
+    Number, Symbol, Sexpr, Qexpr, Expr, Lisper);
 
   puts("Lisper Version 0.5");
   puts("Press Ctrl+c to Exit\n");
@@ -307,7 +309,7 @@ int main(int argc, char** argv) {
 
   }
 
-  mpc_cleanup(5, Number, Symbol, Sexpr, Expr, Lisper);
+  mpc_cleanup(6, Number, Symbol, Sexpr, Qexper, Expr, Lisper);
 
   return 0;
 }
