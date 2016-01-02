@@ -202,7 +202,50 @@ lval* builtin_op(lval* a, char* op) {
   return x;
 }
 
-lval* lval_eval(lval* v);
+lval* builtin_head(lval* a) {
+  if (a->count != 1) {
+    lval_del(a);
+    return lval_err("Too many arguments");
+  }
+
+  if (a->cell[0]->type != LVAL_QEXPR) {
+    lval_del(a);
+    return lval_err("Incorrect types");
+  }
+
+  if (a->cell[0]->count == 0) {
+    lval_del(a);
+    return lval_err("{}!")
+  }
+
+  lval* v = lval_take(a, 0);
+
+  while (v->count > 1) { lval_del(lval_pop(v, 1)); }
+  return v;
+}
+
+lval* lval_tail(lval* v);
+
+  if (a->count != 1) {
+    lval_del(a);
+    return lval_err("Too many arguments");
+  }
+
+  if (a->cell[0]->type != LVAL_QEXPR) {
+    lval_del(a);
+    return lval_err("Incorrect types");
+  }
+
+  if (a->cell[0]->count == 0) {
+    lval_del(a);
+    return lval_err("{}!")
+  }
+
+  lval* v = lval_take(a, 0);
+
+  lval_del(lval_pop(v, 0));
+  return v;
+}
 
 lval* lval_eval_sexpr(lval* v) {
 
