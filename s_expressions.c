@@ -154,6 +154,9 @@ void lval_print(lval* v) {
   }
 }
 
+#define LASSERT(args, cond, err) \
+  if (!(cond)) { lval_del(args); return lval_err(err); }
+
 void lval_println(lval* v) { lval_print(v); putchar('\n'); }
 
 lval* builtin_op(lval* a, char* op) {
