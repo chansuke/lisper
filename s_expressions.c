@@ -121,6 +121,16 @@ lval* lval_pop(lval* v, int i) {
   return x;
 }
 
+lval* lval_join(lval* x, lval* y) {
+
+  while (y->count) {
+    x = lval_add(x, lval_pop(y, 0));
+  }
+
+  lval_del(y);
+  return x;
+}
+
 lval* lval_take(lval* v, int i) {
   lval* x = lval_pop(v, i);
   lval_del(v);
@@ -166,7 +176,6 @@ lval* builtin_list(lval* a) {
 
 lval* builtin_op(lval* a, char* op) {
 
-  /* Ensure all arguments are numbers */
   for (int i = 0; i < a->count; i++) {
     if (a->cell[i]->type != LVAL_NUM) {
       lval_del(a);
@@ -174,21 +183,16 @@ lval* builtin_op(lval* a, char* op) {
     }
   }
 
-  /* Pop the first element */
   lval* x = lval_pop(a, 0);
 
-  /* If no arguments and sub then perform unary negation */
   if ((strcmp(op, "-") == 0) && a->count == 0) {
     x->num = -x->num;
   }
 
-  /* While there are still elements remaining */
   while (a->count > 0) {
 
-    /* Pop the next element */
     lval* y = lval_pop(a, 0);
 
-    /* Perform operation */
     if (strcmp(op, "+") == 0) { x->num += y->num; }
     if (strcmp(op, "-") == 0) { x->num -= y->num; }
     if (strcmp(op, "*") == 0) { x->num *= y->num; }
@@ -201,11 +205,9 @@ lval* builtin_op(lval* a, char* op) {
       x->num /= y->num;
     }
 
-    /* Delete element now finished with */
     lval_del(y);
   }
 
-  /* Delete input expression and return result */
   lval_del(a);
   return x;
 }
@@ -262,6 +264,17 @@ lval* builtin_join(lval* a) {
 
   lval_del(a);
   return x;
+}
+
+lval* builtin(lval* a, char* func) {
+  if (strcmp("list", func) == 0) { return builtin_list(a); }
+  if (strcmp("head", func) == 0) { return builtin_head(a); }
+  if (strcmp("tail", func) == 0) { return builtin_tail(a); }
+  if (strcmp("join", func) == 0) { return builtin_join(a); }
+  if (strcmp("eval", func) == 0) { return builtin_eval(a); }
+  if (strstr("+-/*", func)) { return builtin_op(a, func); }
+  lval_del(a);
+  return lval_err("Unknown Function!");
 }
 
 lval* lval_eval_sexpr(lval* v) {
