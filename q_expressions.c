@@ -339,7 +339,7 @@ int main(int argc, char** argv) {
     ",
     Number, Symbol, Sexpr, Qexpr, Expr, Lisper);
 
-  puts("Lispy Version 0.6");
+  puts("Lisper Version 0.6");
   puts("Press Ctrl+c to Exit\n");
 
   while (1) {
@@ -348,7 +348,7 @@ int main(int argc, char** argv) {
     add_history(input);
 
     mpc_result_t r;
-    if (mpc_parse("<stdin>", input, Lispy, &r)) {
+    if (mpc_parse("<stdin>", input, Lisper, &r)) {
       lval* x = lval_eval(lval_read(r.output));
       lval_println(x);
       lval_del(x);
