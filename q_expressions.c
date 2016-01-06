@@ -162,11 +162,11 @@ lval* builtin_list(lval* a) {
 
 lval* builtin_head(lval* a) {
   LASSERT(a, a->count == 1,
-    "Function 'head' passed too many arguments.");
+    "too many arguments.");
   LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
-    "Function 'head' passed incorrect type.");
+    "incorrect type.");
   LASSERT(a, a->cell[0]->count != 0,
-    "Function 'head' passed {}.");
+    "{}.");
 
   lval* v = lval_take(a, 0);
   while (v->count > 1) { lval_del(lval_pop(v, 1)); }
@@ -175,11 +175,11 @@ lval* builtin_head(lval* a) {
 
 lval* builtin_tail(lval* a) {
   LASSERT(a, a->count == 1,
-    "Function 'tail' passed too many arguments.");
+    "too many arguments.");
   LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
-    "Function 'tail' passed incorrect type.");
+    "incorrect type.");
   LASSERT(a, a->cell[0]->count != 0,
-    "Function 'tail' passed {}.");
+    "{}.");
 
   lval* v = lval_take(a, 0);
   lval_del(lval_pop(v, 0));
@@ -188,9 +188,9 @@ lval* builtin_tail(lval* a) {
 
 lval* builtin_eval(lval* a) {
   LASSERT(a, a->count == 1,
-    "Function 'eval' passed too many arguments.");
+    "too many arguments.");
   LASSERT(a, a->cell[0]->type == LVAL_QEXPR,
-    "Function 'eval' passed incorrect type.");
+    "incorrect type.");
 
   lval* x = lval_take(a, 0);
   x->type = LVAL_SEXPR;
@@ -201,7 +201,7 @@ lval* builtin_join(lval* a) {
 
   for (int i = 0; i < a->count; i++) {
     LASSERT(a, a->cell[i]->type == LVAL_QEXPR,
-      "Function 'join' passed incorrect type.");
+      "incorrect type.");
   }
 
   lval* x = lval_pop(a, 0);
@@ -326,7 +326,7 @@ int main(int argc, char** argv) {
   mpc_parser_t* Sexpr  = mpc_new("sexpr");
   mpc_parser_t* Qexpr  = mpc_new("qexpr");
   mpc_parser_t* Expr   = mpc_new("expr");
-  mpc_parser_t* Lispy  = mpc_new("lispy");
+  mpc_parser_t* Lisper  = mpc_new("lisper");
 
   mpca_lang(MPCA_LANG_DEFAULT,
     "                                                    \
@@ -336,16 +336,16 @@ int main(int argc, char** argv) {
       sexpr  : '(' <expr>* ')' ;                         \
       qexpr  : '{' <expr>* '}' ;                         \
       expr   : <number> | <symbol> | <sexpr> | <qexpr> ; \
-      lispy  : /^/ <expr>* /$/ ;                         \
+      lisper  : /^/ <expr>* /$/ ;                         \
     ",
-    Number, Symbol, Sexpr, Qexpr, Expr, Lispy);
+    Number, Symbol, Sexpr, Qexpr, Expr, Lisper);
 
-  puts("Lispy Version 0.0.0.0.6");
+  puts("Lispy Version 0.6");
   puts("Press Ctrl+c to Exit\n");
 
   while (1) {
 
-    char* input = readline("lispy> ");
+    char* input = readline("lisper> ");
     add_history(input);
 
     mpc_result_t r;
@@ -363,7 +363,7 @@ int main(int argc, char** argv) {
 
   }
 
-  mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Lispy);
+  mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Lisper);
 
   return 0;
 }
