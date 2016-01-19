@@ -391,6 +391,9 @@ lval* builtin_list(lenv* e, lval* a) {
 }
 
 lval* builtin_head(lenv* e, lval* a) {
+#include <editline/history.h>
+#include <editline/history.h>
+#include <editline/history.h>
   LASSERT_NUM("head", a, 1);
   LASSERT_TYPE("head", a, 0, LVAL_QEXPR);
   LASSERT_NOT_EMPTY("head", a, 0);
@@ -509,6 +512,44 @@ lval* builtin_def(lenv* e, lval* a) {
 
 lval* builtin_put(lenv* e, lval* a) {
   return builtin_var(e, a, "=");
+}
+
+lval* builtin_ord(lenv* e, lval* a, char* op) {
+  LASSERT_NUM(op, a, 2);
+  LASSERT_TYPE(op, a, 0, LVAL_NUM);
+  LASSERT_TYPE(op, a, 1, LVAL_NUM);
+
+  int r;
+  if (strcmp(op, ">")  == 0) {
+    r = (a->cell[0]->num >  a->cell[1]->num);
+  }
+  if (strcmp(op, "<")  == 0) {
+    r = (a->cell[0]->num <  a->cell[1]->num);
+  }
+  if (strcmp(op, ">=") == 0) {
+    r = (a->cell[0]->num >= a->cell[1]->num);
+  }
+  if (strcmp(op, "<=") == 0) {
+    r = (a->cell[0]->num <= a->cell[1]->num);
+  }
+  lval_del(a);
+  return lval_num(r);
+}
+
+lval* builtin_gt(lenv* e, lval* a) {
+  return builtin_ord(e, a, ">");
+}
+
+lval* builtin_lt(lenv* e, lval* a) {
+  return builtin_ord(e, a, "<");
+}
+
+lval* builtin_ge(lenv* e, lval* a) {
+  return builtin_ord(e, a, ">=");
+}
+
+lval* builtin_le(lenv* e, lval* a) {
+  return builtin_ord(e, a, "<=");
 }
 
 void lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
@@ -720,7 +761,7 @@ int main(int argc, char** argv) {
     ",
     Number, Symbol, Sexpr, Qexpr, Expr, Lisper);
 
-  puts("Lisper Version 0.8");
+  puts("Lisper Version 0.9");
   puts("Press Ctrl+c to Exit\n");
 
   lenv* e = lenv_new();
