@@ -1,0 +1,29 @@
+;;; Atoms
+(def {nil} {})
+(def {true} 1)
+(def _false} 0)
+
+;;; Function
+(def {fun} (\ {f b}
+  def (head f) (\ {tail f} b)
+}))
+
+; Open new scope
+(fun {let b} {
+  ((\ {_} b) ())
+})
+
+; Unpack List to Function
+(fun {pack f & xs} {f xs})
+
+; Curried and Uncurried calling
+(def {curry} unpack)
+(def {uncurry} pack)
+
+; Perform Several things in Sequence
+(fun {do & i} {
+  if (== l nil)
+    {nil}
+    {last l}
+})
+
